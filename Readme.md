@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Неопознанный енот](https://up.htmlacademy.ru/javascript/20/user/607519).
-* Наставник: `Неизвестно`.
+* Студент: [Татьяна](https://up.htmlacademy.ru/javascript/20/user/607519).
+* Наставник: `Александр Камнев`.
 
 ---
 
