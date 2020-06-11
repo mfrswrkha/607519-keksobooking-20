@@ -22,7 +22,7 @@
 }*/
 'use strict';
 var offerUserAvatar = 'img/avatars/user';
-var OfferType = ['palace', 'flat', 'house', 'bungalo'];
+var offerType = ['palace', 'flat', 'house', 'bungalo'];
 var offerCheckIn = ['12:00', '13:00', '14:00'];
 var offerCheckOut = ['12:00', '13:00', '14:00'];
 var offerFeatures = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
@@ -31,7 +31,7 @@ var myMap = document.querySelector('.map');
 myMap.classList.remove('map--faded');
 var mapWidth = myMap.offsetWidth;
 
-function getRandomValueList(list) {
+function getRandomValueFromList(list) {
   var index = getRandomInteger(0, list.length - 1);
   return list[index];
 }
@@ -51,27 +51,29 @@ function getRandomString(length) {
   return word;
 }
 
-function getRandomValues(source) {
-  var result = [];
-  var index = -1;
-  var repeat = 0;
-  var count = getRandomInteger(1, source.length - 1);
-  // eslint-disable-next-line no-console
-  // console.log(count);
-  for (var i = 0; i < count; i++) {
-    index = getRandomInteger(0, source.length - 1);
-    repeat = 0;
-    for (var j = 0; j < source.length; j++) {
-      if (source[index] === result[j]) {
-        repeat += 1;
-      }
-    }
-    if (repeat === 0) {
-      result.push(source[index]);
-    }
+function shuffle(source) {
+  var result = source.slice(0);
+  var temp;
+  for (var i = source.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    temp = result[i];
+    result[i] = result[j];
+    result[j] = temp;
   }
-  // eslint-disable-next-line no-console
-  // console.log(result);
+  return result;
+}
+
+function getRandomValues(source) {
+  var temp = [];
+  var index = -1;
+  var count = getRandomInteger(1, source.length - 1);
+  var step = Math.floor(source.length / count);
+  var result = [];
+  for (var i = 0; i < count; i++) {
+    index += step;
+    temp.push(source[index]);
+  }
+  result = shuffle(temp);
   return result;
 }
 function createUserOffers(offersCount) {
@@ -87,18 +89,18 @@ function createUserOffers(offersCount) {
 function createRandomDataOffer() {
   var titleTemp = getRandomString(getRandomInteger(5, 15));
   var priceTemp = Math.round(Math.random() * 100);
-  var typeTemp = getRandomValueList(OfferType);
+  var typeTemp = getRandomValueFromList(offerType);
   var roomsTemp = getRandomInteger(1, 4);
   var guestsTemp = getRandomInteger(2, 9);
-  var checkInTemp = getRandomValueList(offerCheckIn);
-  var checkOutTemp = getRandomValueList(offerCheckOut);
+  var checkInTemp = getRandomValueFromList(offerCheckIn);
+  var checkOutTemp = getRandomValueFromList(offerCheckOut);
   var featuresTemp = getRandomValues(offerFeatures);
   var photosTemp = getRandomValues(offerPhotos);
   var descriptionTemp = getRandomString(getRandomInteger(5, 15));
   var locationX = getRandomInteger(1, mapWidth);
   var locationY = getRandomInteger(130, 629);
   var addressTemp = locationX + ', ' + locationY;
-  var RandomOffer = {
+  var randomOffer = {
     author: {
       avatar: 'http://userRandom.png'
     },
@@ -120,37 +122,31 @@ function createRandomDataOffer() {
       y: locationY
     }
   };
-  return RandomOffer;
+  return randomOffer;
 }
 function setMapPins(sourceData) {
   var mapPins = document.querySelector('.map__pins');
   var template = document.querySelector('#pin').content.querySelector('button');
   var fragment = document.createDocumentFragment();
-  var x = 0;
-  var y = 0;
+  var imageOffsetX = Math.round(template.children[0].width / 2);
+  var imageOffsetY = Math.round(template.children[0].height);
   for (var i = 0; i < sourceData.length; i++) {
     var element = template.cloneNode(true);
     var childEl = element.children[0];
-    childEl.src = sourceData[i].author.avatar;
-    childEl.alt = sourceData[i].offer.title;
-    x = sourceData[i].location.x - Math.round(childEl.width / 2);
-    y = sourceData[i].location.y - Math.round(childEl.height / 2);
+    var mapAdvert = sourceData[i];
+    childEl.src = mapAdvert.author.avatar;
+    childEl.alt = mapAdvert.offer.title;
+    var x = mapAdvert.location.x - imageOffsetX;
+    var y = mapAdvert.location.y - imageOffsetY;
     element.style = 'left: ' + x + 'px; top: ' + y + 'px;';
     fragment.appendChild(element);
   }
   mapPins.appendChild(fragment);
   // eslint-disable-next-line no-console
-  // console.log(element.children[0]);
-  // eslint-disable-next-line no-console
-  // console.log(childEl);
-  // eslint-disable-next-line no-console
-  // console.log(mapPins);
-}
-var myCount = 8;
-var myArray = createUserOffers(myCount);
-// eslint-disable-next-line no-console
-console.log(myArray);
+  console.log(mapPins);
 
-// eslint-disable-next-line no-console
-// console.log(mapWidth);
-setMapPins(myArray);
+}
+
+var countOfOffers = 8;
+var offers = createUserOffers(countOfOffers);
+setMapPins(offers);
