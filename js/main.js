@@ -64,16 +64,12 @@ function shuffle(source) {
 }
 
 function getRandomValues(source) {
-  var temp = [];
-  var index = -1;
+  var temp = shuffle(source);
   var count = getRandomInteger(1, source.length - 1);
-  var step = Math.floor(source.length / count);
   var result = [];
   for (var i = 0; i < count; i++) {
-    index += step;
-    temp.push(source[index]);
+    result.push(temp[i]);
   }
-  result = shuffle(temp);
   return result;
 }
 function createUserOffers(offersCount) {
