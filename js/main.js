@@ -142,7 +142,62 @@ function setMapPins(sourceData) {
   console.log(mapPins);
 
 }
-
+function setCard(sourceData, index) {
+  // var mapPins = document.querySelector('.map__pins');
+  var template = document.querySelector('#card').content.querySelector('article');
+  var fragment = document.createDocumentFragment();
+  var element = template.cloneNode(true);
+  var cardTitle = element.querySelector('.popup__title');
+  var cardAddress = element.querySelector('.popup__text--address');
+  var cardPrice = element.querySelector('.popup__text--price');
+  var cardType = element.querySelector('.popup__type');
+  var cardCapacity = element.querySelector('.popup__text--capacity');
+  var cardTime = element.querySelector('.popup__text--time');
+  var cardFeatures = element.querySelector('.popup__features');
+  var cardDescription = element.querySelector('.popup__description');
+  var cardPhotos = element.querySelector('.popup__photos');
+  var cardAvatar = element.querySelector('.popup__avatar');
+  var li = document.createElement('li');
+  var img = cardPhotos.querySelector('.popup__photo');
+  var additionalImg = img;
+  var sourceElementOffer = sourceData[index].offer;
+  var sourceElementAuthor = sourceData[index].author;
+  cardTitle.textContent = sourceElementOffer.title;
+  cardAddress.textContent = sourceElementOffer.address;
+  cardPrice.textContent = sourceElementOffer.price.toString() + 'Р/ночь';
+  if (sourceElementOffer.type === 'flat') {
+    cardType.textContent = 'Квартира';
+  } else if (sourceElementOffer.type === 'bungalo') {
+    cardType.textContent = 'Квартира';
+  } else if (sourceElementOffer.type === 'house') {
+    cardType.textContent = 'Дом';
+  } else if (sourceElementOffer.type === 'palace') {
+    cardType.textContent = 'Дворец';
+  } else {
+    cardType.textContent = 'Не указано';
+  }
+  cardCapacity.textContent = sourceElementOffer.rooms.toString() + ' комнаты для ' + sourceElementOffer.guests.toString() + ' гостей';
+  cardTime.textContent = 'Заезд после ' + sourceElementOffer.checkIn + ' , выезд до  ' + sourceElementOffer.checkOut;
+  cardFeatures.textContent = '';
+  for (var i = 0; i < sourceElementOffer.features.length; i++) {
+    li.textContent = sourceElementOffer.features[i];
+    cardFeatures.appendChild(li);
+  }
+  cardDescription.textContent = sourceElementOffer.description;
+  for (var j = 0; j < sourceElementOffer.photos.length; j++) {
+    additionalImg = img.cloneNode(true);
+    additionalImg.src = sourceElementOffer.photos[j];
+    cardPhotos.appendChild(additionalImg);
+  }
+  cardPhotos.children[0].remove();
+  cardAvatar.src = sourceElementAuthor.avatar;
+  fragment.appendChild(element);
+  var p1 = document.querySelector('.map__filters-container');
+  myMap.insertBefore(fragment, p1);
+}
 var countOfOffers = 8;
 var offers = createUserOffers(countOfOffers);
+// eslint-disable-next-line no-console
+console.log(offers);
 setMapPins(offers);
+setCard(offers, 0);
