@@ -5,18 +5,7 @@
 // eslint-disable-next-line no-console
 // console.log(offers);
   var url = 'https://javascript.pages.academy/keksobooking/data';
-  var result = '';
-  var onError = function (message) {
-    result = message;
-  };
-
-  var onSuccess = function (data) {
-    result = data;
-  };
-  // window.map.setMapPins();
-  // window.card.setCard(offers, 0);
-  window.xhr.loadOffers(url, onSuccess, onError);
-  console.log(result);
+  window.xhr.loadData(url, window.map.setMapPins);
   window.common.setStateInit();
   window.pin.listenPinForNewOfferMouse();
   window.pin.listenPinForNewOfferKey();

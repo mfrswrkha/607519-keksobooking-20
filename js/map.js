@@ -3,7 +3,7 @@
   window.map = {
     mapPins: document.querySelector('.map__pins'),
     setMapPins: function (sourceData) {
-     // var sourceData = window.xhr.loadOffers();
+      // var sourceData = window.xhr.loadOffers();
       var template = document.querySelector('#pin').content.querySelector('button');
       var fragment = document.createDocumentFragment();
       var imageOffsetX = Math.round(template.children[0].width / 2);
