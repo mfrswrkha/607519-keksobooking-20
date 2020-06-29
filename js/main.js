@@ -1,5 +1,5 @@
 'use strict';
-//update for resolve merge conflict
+// update for resolve merge conflict
 (function () {
   var url = 'https://javascript.pages.academy/keksobooking/data';
   window.xhr.loadData(url, window.map.setMapPins);
