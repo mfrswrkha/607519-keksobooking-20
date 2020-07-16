@@ -7,6 +7,7 @@
       var element = template.cloneNode(true);
       var sourceElementOffer = sourceData[index].offer;
       var sourceElementAuthor = sourceData[index].author;
+      var closeButton = element.querySelector('.popup__close');
       setCardCommonInfo(element, sourceElementOffer);
       setCardType(element, sourceElementOffer);
       setCardFeatures(element, sourceElementOffer);
@@ -15,6 +16,19 @@
       fragment.appendChild(element);
       var mapFilters = document.querySelector('.map__filters-container');
       window.map.offersMap.insertBefore(fragment, mapFilters);
+      closeButton.addEventListener('mousedown', function (evt) {
+        var LEFT_BUTTON = 0;
+        if (evt.button === LEFT_BUTTON) {
+          var card = window.map.offersMap.querySelector('article');
+          card.remove();
+        }
+      });
+      closeButton.addEventListener('keydown', function (evt) {
+        if (evt.key === 'Esc') {
+          var card = window.map.offersMap.querySelector('article');
+          card.remove();
+        }
+      });
     }
   };
   function setCardCommonInfo(element, source) {
@@ -32,7 +46,7 @@
     } else {
       cardCapacity.textContent = source.rooms.toString() + ' комнаты для ' + source.guests.toString() + ' гостей';
     }
-    cardTime.textContent = 'Заезд после ' + source.checkIn + ' , выезд до  ' + source.checkOut;
+    cardTime.textContent = 'Заезд после ' + source.checkin + ' , выезд до  ' + source.checkout;
     cardDescription.textContent = source.description;
     return element;
   }
