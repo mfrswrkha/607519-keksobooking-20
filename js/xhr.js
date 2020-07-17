@@ -26,7 +26,6 @@
     },
     sendData: function (data, url, onSuccessSendData, onErrorSendData) {
       var xhr = new XMLHttpRequest();
-      console.log('formData:',data);
       xhr.responseType = 'json';
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {

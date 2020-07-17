@@ -3,6 +3,7 @@
   var adForm = document.querySelector('.ad-form');
   var pinForNewOffer = window.map.mapPins.querySelector('.map__pin--main');
   var pinForNewOfferImg = pinForNewOffer.querySelector('img');
+  var filterForm = document.querySelector('.map__filters');
   var guestsForRoomsRules = [
     {rooms: '1', guests: ['1']},
     {rooms: '2', guests: ['1', '2']},
@@ -41,12 +42,21 @@
       placePhoto.setAttribute('accept', 'image/*');
       buttonSubmit.addEventListener('click', function (evt) {
         if (evt.button === LEFT_BUTTON) {
-          if (!validateRoomsGuests(housingRooms, housingGuests)&&(!title.validity.valid) {
-            evt.preventDefault();
-            console.log(title.validity);
-          } else {
+          evt.preventDefault();
+          if ((validateRoomsGuests(housingRooms, housingGuests)) && (title.validity.valid) && (price.validity.valid)) {
+            // evt.preventDefault();
             address.removeAttribute('disabled');
             window.xhr.sendData(new FormData(adForm), window.main.urlForUpload, window.common.onSuccessSendData, window.common.onErrorSendData);
+            adForm.reset();
+            filterForm.reset();
+          } else {
+            if (!title.validity.valid) {
+
+              setErrorValidateNotification(title, '');
+            }
+            if (!price.validity.valid) {
+              setErrorValidateNotification(price, '');
+            }
           }
         }
       }
@@ -56,6 +66,11 @@
       });
       typePlace.addEventListener('change', function () {
         setValidateTypePlacePrice(typePlace, price);
+        if (price.checkValidity()) {
+          setSuccessValidateNotification(price, '');
+        } else {
+          setErrorValidateNotification(price, '');
+        }
       });
       housingRooms.addEventListener('click', function () {
         validateRoomsGuests(housingRooms, housingGuests);
@@ -69,7 +84,22 @@
       timeout.addEventListener('change', function () {
         setSyncroValuesTimeinTimeout(timeout, timein);
       });
+      title.addEventListener('input', function () {
+        if (title.checkValidity()) {
+          setSuccessValidateNotification(title, '');
+        } else {
+          setErrorValidateNotification(title, '');
+        }
+      });
+      price.addEventListener('input', function () {
+        if (price.checkValidity()) {
+          setSuccessValidateNotification(price, '');
+        } else {
+          setErrorValidateNotification(price, '');
+        }
+      });
     },
+
     setAddressFromPin: function (element, pageStateActive) {
       var imageOffsetX = Math.round(pinForNewOfferImg.width / 2);
       if (pageStateActive) {
@@ -92,9 +122,10 @@
   }
   function setSuccessValidateNotification(element, message) {
     var BORDER_SUCCESS = '1px solid #d9d9d3';
-    element.setCustomValidity(message);
     element.style.border = BORDER_SUCCESS;
+    element.setCustomValidity(message);
   }
+
   function setLimitsForInput(input, minSize, maxSize, required, placeholderText) {
     var inputType = input.getAttribute('type');
     if (inputType === 'number') {
@@ -111,18 +142,7 @@
       input.setAttribute('placeholder', placeholderText);
     }
   }
-  /*
-  function validateTitle(title) {
-    var TITLE_MIN_LENGTH = 30;
-    var TITLE_MAX_LENGTH = 100;
-    if (title.value.length < TITLE_MIN_LENGTH) {
-      setErrorValidateNotification(title, 'Минимальное количество символов: ' + TITLE_MIN_LENGTH);
-    } else if (title.value.length <= TITLE_MAX_LENGTH) {
-      setSuccessValidateNotification(title, 'Максимальное количество символов: ' + TITLE_MAX_LENGTH);
-    } else if (title.value.length > TITLE_MAX_LENGTH) {
-      setErrorValidateNotification(title, 'Максимальное количество символов: ' + TITLE_MAX_LENGTH);
-    }
-  }*/
+
   /* function setAvatarPreview(authorAvatar) {
     var avatarDiv = adForm.querySelector('.ad-form-header__preview');
     var avatarImg = avatarDiv.querySelector('img');
@@ -164,4 +184,9 @@
     setSuccessValidateNotification(housingRooms, '');
     return true;
   }
+  /*
+  function sentForm(form) {
+    var data = new FormData(form);
+    return data;
+  }*/
 })();
