@@ -18,7 +18,6 @@
       removeAttributeForListFields(adFormInputsSelects, 'disabled');
       console.log(window.main.offers);
       if (window.main.offers.length > 0) {
-        console.log('manyOffers', window.map.mapPins);
         removeAttributeForListFields(filterFormInputsSelects, 'disabled');
       }
       window.map.offersMap.classList.remove('map--faded');
@@ -66,17 +65,18 @@
     listenFilterHouseType: function (size) {
       var filterHouseType = filterForm.querySelector('#housing-type');
       console.log('listenFiltercommon');
-      filterHouseType.addEventListener('click', function () {
-
-      }
-      );
       filterHouseType.addEventListener('change', function () {
         window.common.filterOffers(size);
         //    var card = window.map.offersMap.querySelector('article');
         // card.remove();
       });
+    },
+    onSuccessSendData: function (data) {
+      console.log('successSendData', data);
+    },
+    onErrorSendData: function (data) {
+      console.log('errorSendData', data);
     }
-
   };
   function setAttributeForListFields(element, attribute, value) {
     for (var i = 0; i < element.length; i++) {

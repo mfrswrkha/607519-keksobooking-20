@@ -22,28 +22,38 @@
   var DEFAULT_MAX_PRICE = 1000000;
   window.form = {
     fillAdForm: function () {
+      var authorAvatar = adForm.querySelector('#avatar');
       var housingRooms = adForm.querySelector('#room_number');
       var housingGuests = adForm.querySelector('#capacity');
       var title = adForm.querySelector('#title');
+      var address = adForm.querySelector('#address');
       var price = adForm.querySelector('#price');
       var timein = adForm.querySelector('#timein');
       var timeout = adForm.querySelector('#timeout');
       var typePlace = adForm.querySelector('#type');
-
+      var placePhoto = adForm.querySelector('#images');
       var buttonSubmit = adForm.querySelector('.ad-form__submit');
       setLimitsForInput(title, TITLE_MIN_LENGTH, TITLE_MAX_LENGTH, true, null);
       setValidateTypePlacePrice(typePlace, price);
+      adForm.setAttribute('action', window.main.urlForUpload);
+
+      authorAvatar.setAttribute('accept', 'image/*');
+      placePhoto.setAttribute('accept', 'image/*');
       buttonSubmit.addEventListener('click', function (evt) {
         if (evt.button === LEFT_BUTTON) {
-          if (!validateRoomsGuests(housingRooms, housingGuests)) {
+          if (!validateRoomsGuests(housingRooms, housingGuests)&&(!title.validity.valid) {
             evt.preventDefault();
+            console.log(title.validity);
+          } else {
+            address.removeAttribute('disabled');
+            window.xhr.sendData(new FormData(adForm), window.main.urlForUpload, window.common.onSuccessSendData, window.common.onErrorSendData);
           }
         }
       }
       );
-      // title.addEventListener('input', function () {
-      //      validateTitle(title);
-      //  });
+      authorAvatar.addEventListener('change', function () {
+        //   setAvatarPreview(authorAvatar);
+      });
       typePlace.addEventListener('change', function () {
         setValidateTypePlacePrice(typePlace, price);
       });
@@ -113,6 +123,11 @@
       setErrorValidateNotification(title, 'Максимальное количество символов: ' + TITLE_MAX_LENGTH);
     }
   }*/
+  /* function setAvatarPreview(authorAvatar) {
+    var avatarDiv = adForm.querySelector('.ad-form-header__preview');
+    var avatarImg = avatarDiv.querySelector('img');
+    avatarImg.src = authorAvatar.value;
+  }*/
   function setValidateTypePlacePrice(typePlace, price) {
     var currentTypePlace = typePlace.options[typePlace.selectedIndex].value;
     var count = -1;
@@ -130,7 +145,6 @@
   function setSyncroValuesTimeinTimeout(source, destination) {
     destination.value = source.options[source.selectedIndex].value;
   }
-
   function validateRoomsGuests(housingRooms, housingGuests) {
     var currentCountOfRooms = housingRooms.options[housingRooms.selectedIndex].value;
     var currentCountOfGuests = housingGuests.options[housingGuests.selectedIndex].value;

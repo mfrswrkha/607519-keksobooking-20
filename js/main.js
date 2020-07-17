@@ -1,14 +1,16 @@
 'use strict';
 (function () {
-  var url = 'https://javascript.pages.academy/keksobooking/data';
+  var urlForLoad = 'https://javascript.pages.academy/keksobooking/data';
+  var urlForUpload = 'https://javascript.pages.academy/keksobooking';
   var sizeOffersList = 5;
   window.main = {
+    urlForUpload: urlForUpload,
     sizeOffersList: sizeOffersList,
     runBasicLogic: runBasicLogic,
     offers: []
   };
 
-  window.xhr.loadData(url, runBasicLogic);
+  window.xhr.loadData(urlForLoad, runBasicLogic);
   function runBasicLogic(sourceData) {
     window.main.offers = sourceData.slice(0);
     // eslint-disable-next-line no-console
