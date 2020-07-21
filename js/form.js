@@ -1,8 +1,7 @@
 'use strict';
 (function () {
   var adForm = document.querySelector('.ad-form');
-  var pinForNewOffer = window.map.mapPins.querySelector('.map__pin--main');
-  var pinForNewOfferImg = pinForNewOffer.querySelector('img');
+  var pinForNewOfferImg = window.pin.pinForNewOffer.querySelector('img');
   var filterForm = document.querySelector('.map__filters');
   var guestsForRoomsRules = [
     {rooms: '1', guests: ['1']},
@@ -22,6 +21,8 @@
   var DEFAULT_MIN_PRICE = 0;
   var DEFAULT_MAX_PRICE = 1000000;
   window.form = {
+    adForm: adForm,
+    filterForm: filterForm,
     fillAdForm: function () {
       var authorAvatar = adForm.querySelector('#avatar');
       var housingRooms = adForm.querySelector('#room_number');
@@ -34,6 +35,7 @@
       var typePlace = adForm.querySelector('#type');
       var placePhoto = adForm.querySelector('#images');
       var buttonSubmit = adForm.querySelector('.ad-form__submit');
+      var buttonReset = adForm.querySelector('.ad-form__reset');
       setLimitsForInput(title, TITLE_MIN_LENGTH, TITLE_MAX_LENGTH, true, null);
       setValidateTypePlacePrice(typePlace, price);
       adForm.setAttribute('action', window.main.urlForUpload);
@@ -47,8 +49,7 @@
             // evt.preventDefault();
             address.removeAttribute('disabled');
             window.xhr.sendData(new FormData(adForm), window.main.urlForUpload, window.common.onSuccessSendData, window.common.onErrorSendData);
-            adForm.reset();
-            filterForm.reset();
+
           } else {
             if (!title.validity.valid) {
 
@@ -98,8 +99,12 @@
           setErrorValidateNotification(price, '');
         }
       });
+      buttonReset.addEventListener('click', function (evt) {
+        if (evt.button === LEFT_BUTTON) {
+          evt.preventDefault();
+        }
+      });
     },
-
     setAddressFromPin: function (element, pageStateActive) {
       var imageOffsetX = Math.round(pinForNewOfferImg.width / 2);
       if (pageStateActive) {
@@ -107,9 +112,8 @@
       } else {
         imageOffsetY = Math.round(pinForNewOfferImg.height / 2);
       }
-      var coord = pinForNewOffer.getBoundingClientRect();
-      var x = Math.round(coord.x) + imageOffsetX;
-      var y = Math.round(coord.y) + imageOffsetY;
+      var x = window.pin.pinForNewOffer.offsetLeft + imageOffsetX;
+      var y = window.pin.pinForNewOffer.offsetTop + imageOffsetY;
       var address = element.querySelector('#address');
       address.value = x.toString() + ', ' + y.toString();
     }
@@ -184,9 +188,5 @@
     setSuccessValidateNotification(housingRooms, '');
     return true;
   }
-  /*
-  function sentForm(form) {
-    var data = new FormData(form);
-    return data;
-  }*/
+
 })();

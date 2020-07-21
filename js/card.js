@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   window.card = {
+    removeCard: removeCard,
     setCard: function (sourceData, index) {
       var template = document.querySelector('#card').content.querySelector('article');
       var fragment = document.createDocumentFragment();
@@ -90,5 +91,11 @@
     }
     cardPhotos.children[0].remove();
     return element;
+  }
+  function removeCard() {
+    var card = window.map.offersMap.querySelector('article');
+    if (card !== null) {
+      card.remove();
+    }
   }
 })();

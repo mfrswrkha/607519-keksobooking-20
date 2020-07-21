@@ -2,9 +2,17 @@
 'use strict';
 (function () {
   var pinForNewOffer = document.querySelector('.map__pin--main');
+  var pinForNewOfferDefault = {
+    styleTop: pinForNewOffer.style.top,
+    styleLeft: pinForNewOffer.style.left
+  };
   var adForm = document.querySelector('.ad-form');
+  var address = adForm.querySelector('#address');
   var LEFT_BUTTON = 0;
   window.pin = {
+    pinForNewOffer: pinForNewOffer,
+    pinForNewOfferDefault: pinForNewOfferDefault,
+    defaultLocationPin: document.querySelector('.map__pin--main'),
     listenPinForNewOfferMouse: function () {
       pinForNewOffer.addEventListener('mousedown', function (evt) {
         if (evt.button === LEFT_BUTTON) {
@@ -32,7 +40,7 @@
 
               pinForNewOffer.style.top = (pinForNewOffer.offsetTop - shift.y) + 'px';
               pinForNewOffer.style.left = (pinForNewOffer.offsetLeft - shift.x) + 'px';
-              window.form.setAddressFromPin(adForm, true);
+              address.value = (pinForNewOffer.offsetLeft - shift.x).toString() + ', ' + (pinForNewOffer.offsetTop - shift.y).toString();
             };
 
             var onMouseUp = function (upEvt) {
@@ -56,21 +64,34 @@
       });
     },
     listenPinOffer: function () {
-      var allPins = window.map.mapPins.querySelectorAll('.map__pin');
-      console.log('mappins0', allPins[0]);
+      // var allPins = window.map.mapPins.querySelectorAll('.map__pin');
+      // console.log('mappins0', allPins[0]);
       // allPins[0].remove();
       //  offerPins.fi
       // console.log('mappins', allPins);
       // for
       window.map.mapPins.addEventListener('mousedown', function (evt) {
+        var currentActivePin = document.querySelector('.map__pin--active');
         if (evt.target.parentNode.classList.contains('map__pin--main')) {
-          console.log('ne ura!');
+          if (currentActivePin !== null) {
+            currentActivePin.classList.remove('map__pin--active');
+          }
         } else if (evt.target.parentNode.classList.contains('map__pin')) {
-          var index = window.map.offersMap.indexOf(evt.target.parentNode);
-          console.log('i', index);
+          var offerId = evt.target.parentNode.getAttribute('sourceData');
+          var card = window.map.offersMap.querySelector('article');
+          if (currentActivePin !== null) {
+            currentActivePin.classList.remove('map__pin--active');
+          }
+          evt.target.parentNode.classList.add('map__pin--active');
+          if (card !== null) {
+            card.remove();
+          }
+          window.card.setCard(window.main.offers, offerId);
+
+
         }
         // eslint-disable-next-line no-console
-        console.log('index-', evt.target.parentNode);
+        // console.log('index-', evt.target.parentNode);
       });
     }
   };

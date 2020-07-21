@@ -19,6 +19,11 @@
       console.log(window.main.offers);
       if (window.main.offers.length > 0) {
         removeAttributeForListFields(filterFormInputsSelects, 'disabled');
+        window.map.setMapPins(window.main.offers);
+        window.common.filterOffers(window.main.sizeOffersList);
+        window.pin.listenPinOffer();
+        // eslint-disable-next-line no-console
+        window.common.listenFilterHouseType(window.main.sizeOffersList);
       }
       window.map.offersMap.classList.remove('map--faded');
       window.form.setAddressFromPin(adForm, true);
@@ -62,13 +67,22 @@
       }
 
     },
+
+    setStateReset: function () {
+      window.pin.pinForNewOffer.style.left = window.pin.pinForNewOfferDefault.styleLeft;
+      window.pin.pinForNewOffer.style.top = window.pin.pinForNewOfferDefault.styleTop;
+      window.map.removeMapPins();
+      window.form.adForm.reset();
+      window.form.filterForm.reset();
+      window.card.removeCard();
+      // window.form.setAddressFromPin(adForm, false);
+
+    },
     listenFilterHouseType: function (size) {
       var filterHouseType = filterForm.querySelector('#housing-type');
-      console.log('listenFiltercommon');
       filterHouseType.addEventListener('change', function () {
         window.common.filterOffers(size);
-        //    var card = window.map.offersMap.querySelector('article');
-        // card.remove();
+        window.card.removeCard();
       });
     },
     onSuccessSendData: function (data) {

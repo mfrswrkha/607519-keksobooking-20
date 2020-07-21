@@ -16,9 +16,21 @@
         var x = mapAdvert.location.x - imageOffsetX;
         var y = mapAdvert.location.y - imageOffsetY;
         element.style = 'left: ' + x + 'px; top: ' + y + 'px;';
+        element.setAttribute('sourceData', i);
         fragment.appendChild(element);
       }
       window.map.mapPins.appendChild(fragment);
+    },
+    removeMapPins: function () {
+      var index = 0;
+      var childrenCount = window.map.mapPins.children.length;
+      for (var i = 0; i < childrenCount; i++) {
+        if (window.map.mapPins.children[index].type === 'button') {
+          window.map.mapPins.removeChild(window.map.mapPins.children[index]);
+        } else {
+          index++;
+        }
+      }
     },
     offersMap: document.querySelector('.map')
   };
