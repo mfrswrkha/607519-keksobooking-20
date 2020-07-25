@@ -15,6 +15,11 @@
     {type: 'house', minPrice: 5000},
     {type: 'palace', minPrice: 10000}
   ];
+  var priceRangeRules = [
+    {range: 'low', minPrice: 0, maxPrice: 9999},
+    {range: 'middle', minPrice: 10000, maxPrice: 50000},
+    {range: 'high', minPrice: 50000}
+  ];
   var LEFT_BUTTON = 0;
   var TITLE_MIN_LENGTH = 30;
   var TITLE_MAX_LENGTH = 100;
@@ -116,7 +121,8 @@
       var y = window.pin.pinForNewOffer.offsetTop + imageOffsetY;
       var address = element.querySelector('#address');
       address.value = x.toString() + ', ' + y.toString();
-    }
+    },
+    validateFilterHousingPrice: validateFilterHousingPrice
   };
 
   function setErrorValidateNotification(element, message) {
@@ -146,12 +152,6 @@
       input.setAttribute('placeholder', placeholderText);
     }
   }
-
-  /* function setAvatarPreview(authorAvatar) {
-    var avatarDiv = adForm.querySelector('.ad-form-header__preview');
-    var avatarImg = avatarDiv.querySelector('img');
-    avatarImg.src = authorAvatar.value;
-  }*/
   function setValidateTypePlacePrice(typePlace, price) {
     var currentTypePlace = typePlace.options[typePlace.selectedIndex].value;
     var count = -1;
@@ -188,5 +188,23 @@
     setSuccessValidateNotification(housingRooms, '');
     return true;
   }
-
+  function validateFilterHousingPrice(priceRange, currentPrice) {
+    var priceRangeRule = priceRangeRules.find(function (item) {
+      if (item.range === priceRange) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    // eslint-disable-next-line no-console
+    console.log('rangePrice', priceRangeRule);
+    if (currentPrice >= priceRangeRule.minPrice) {
+      if (priceRangeRule.maxPrice === null) {
+        return true;
+      } else if (currentPrice <= priceRangeRule.maxPrice) {
+        return true;
+      }
+    }
+    return false;
+  }
 })();

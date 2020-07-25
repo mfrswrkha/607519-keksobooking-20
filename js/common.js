@@ -6,6 +6,10 @@
   var adFormInputsSelects = adForm.querySelectorAll('input,select');
   var address = adForm.querySelector('#address');
   var filterFormInputsSelects = filterForm.querySelectorAll('input,select');
+  var filterHouseType = filterForm.querySelector('#housing-type');
+  var filterHousingPrice = filterForm.querySelector('#housing-price');
+  var filterHousingRooms = filterForm.querySelector('#housing-rooms');
+  var filterHousingGuests = filterForm.querySelector('#housing-guests');
   window.common = {
     setStateInit: function () {
       adForm.classList.add('ad-form--disabled');
@@ -20,10 +24,11 @@
       if (window.main.offers.length > 0) {
         removeAttributeForListFields(filterFormInputsSelects, 'disabled');
         window.map.setMapPins(window.main.offers);
+        console.log('defaultistPin');
         window.common.filterOffers(window.main.sizeOffersList);
         window.pin.listenPinOffer();
         // eslint-disable-next-line no-console
-        window.common.listenFilterHouseType(window.main.sizeOffersList);
+        window.common.listenFilterHouse(window.main.sizeOffersList);
       }
       window.map.offersMap.classList.remove('map--faded');
       window.form.setAddressFromPin(adForm, true);
@@ -32,39 +37,42 @@
       // window.common.listenFilterHouseType(window.main.sizeOffersList);
     },
     filterOffers: function (size) {
-      console.log('filterOfferEnter');
-      function isSomeHouseType(element) {
-        if (filterHouseType.value === 'any') {
-          return element;
-        } else if (filterHouseType.value === element.offer.type) {
-          return element;
-        }
-        return null;
-      }
-      var filterHouseType = filterForm.querySelector('#housing-type');
-      var index = 0;
+      var count = 0;
+      var filteredOfferCount = 0;
       var childrenCount = window.map.mapPins.children.length;
       for (var i = 0; i < childrenCount; i++) {
-        if (window.map.mapPins.children[index].type === 'button') {
-          window.map.mapPins.removeChild(window.map.mapPins.children[index]);
+        if (window.map.mapPins.children[count].type === 'button') {
+          window.map.mapPins.removeChild(window.map.mapPins.children[count]);
         } else {
-          index++;
+          count++;
         }
       }
-      var result = window.main.offers.filter(isSomeHouseType);
-      console.log('resultLength ', result.length);
-      if (result.length > size) {
-        var topSizeList = result.slice(0, size);
-        console.log('topSizeresult:', topSizeList);
-        window.map.setMapPins(topSizeList);
-        // break;
-      } else if (result.length === 0) {
-        console.log('not found result');
-        // break;
-      } else {
-        console.log('default', result);
-        window.map.setMapPins(result);
+      window.main.offers.forEach(function (item, index) {
+        if ((filterHouseType.value === 'any') | (filterHouseType.value === item.offer.type)) {
+          if ((filterHousingRooms.value === 'any') | (filterHousingRooms.value === item.offer.rooms)) {
+            if ((filterHousingGuests.value === 'any') | (filterHousingGuests.value === item.offer.guests)) {
+              if (filterHousingPrice.value === 'any') {
+                if (filteredOfferCount < size) {
+                  window.map.setMapPin(item, index);
+                  filteredOfferCount++;
+                }
+              } else {
+                if (window.form.validateFilterHousingPrice(filterHousingPrice.options[filterHousingPrice.selectedIndex].value, item.offer.price)) {
+                  if (filteredOfferCount < size) {
+                    window.map.setMapPin(item, index);
+                    filteredOfferCount++;
+                  }
+                } else {
+                  console.log('blackList', item);
+                }
+              }
+
+            }
+          }
+        }
       }
+
+      );
 
     },
 
@@ -79,8 +87,26 @@
 
     },
     listenFilterHouseType: function (size) {
-      var filterHouseType = filterForm.querySelector('#housing-type');
+    //  var filterHouseType = filterForm.querySelector('#housing-type');
       filterHouseType.addEventListener('change', function () {
+        window.common.filterOffers(size);
+        window.card.removeCard();
+      });
+    },
+    listenFilterHouse: function (size) {
+      filterHouseType.addEventListener('change', function () {
+        window.common.filterOffers(size);
+        window.card.removeCard();
+      });
+      filterHousingPrice.addEventListener('change', function () {
+        window.common.filterOffers(size);
+        window.card.removeCard();
+      });
+      filterHousingRooms.addEventListener('change', function () {
+        window.common.filterOffers(size);
+        window.card.removeCard();
+      });
+      filterHousingGuests.addEventListener('change', function () {
         window.common.filterOffers(size);
         window.card.removeCard();
       });
