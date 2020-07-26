@@ -122,7 +122,8 @@
       var address = element.querySelector('#address');
       address.value = x.toString() + ', ' + y.toString();
     },
-    validateFilterHousingPrice: validateFilterHousingPrice
+    validateFilterHousingPrice: validateFilterHousingPrice,
+    validateFilterHouseFeatures: validateFilterHouseFeatures
   };
 
   function setErrorValidateNotification(element, message) {
@@ -207,4 +208,34 @@
     }
     return false;
   }
+
+  function validateFilterHouseFeatures(houseFeatures, currentFeatures) {
+    var checkedFeatures = [];
+    var validateStatus = false;
+    for (var i = 0; i < houseFeatures.length; i++) {
+      if (houseFeatures[i].checked) {
+        checkedFeatures.push(houseFeatures[i].value);
+      }
+    }
+    if (checkedFeatures.length > 0) {
+      if (currentFeatures.length > 0) {
+        i = 0;
+        do {
+          if (currentFeatures.includes(checkedFeatures[i])) {
+            validateStatus = true;
+          } else {
+            validateStatus = false;
+          }
+          i++;
+        }
+        while ((i < checkedFeatures.length) && (validateStatus));
+      } else {
+        validateStatus = false;
+      }
+    } else {
+      validateStatus = true;
+    }
+    return validateStatus;
+  }
+
 })();

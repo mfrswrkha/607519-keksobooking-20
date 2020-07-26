@@ -10,12 +10,15 @@
   var filterHousingPrice = filterForm.querySelector('#housing-price');
   var filterHousingRooms = filterForm.querySelector('#housing-rooms');
   var filterHousingGuests = filterForm.querySelector('#housing-guests');
+  var filterHouseFeatures = filterForm.querySelector('#housing-features');
+  var filterHouseFeaturesList = filterForm.querySelector('#housing-features').querySelectorAll('input');
   window.common = {
     setStateInit: function () {
       adForm.classList.add('ad-form--disabled');
       setAttributeForListFields(adFormInputsSelects, 'disabled', 'disabled');
       setAttributeForListFields(filterFormInputsSelects, 'disabled', 'disabled');
       window.form.setAddressFromPin(adForm, false);
+
     },
     setStateActive: function () {
       adForm.classList.remove('ad-form--disabled');
@@ -48,25 +51,25 @@
         }
       }
       window.main.offers.forEach(function (item, index) {
-        if ((filterHouseType.value === 'any') | (filterHouseType.value === item.offer.type)) {
-          if ((filterHousingRooms.value === 'any') | (filterHousingRooms.value === item.offer.rooms)) {
-            if ((filterHousingGuests.value === 'any') | (filterHousingGuests.value === item.offer.guests)) {
-              if (filterHousingPrice.value === 'any') {
-                if (filteredOfferCount < size) {
-                  window.map.setMapPin(item, index);
-                  filteredOfferCount++;
-                }
-              } else {
-                if (window.form.validateFilterHousingPrice(filterHousingPrice.options[filterHousingPrice.selectedIndex].value, item.offer.price)) {
+        if (window.form.validateFilterHouseFeatures(filterHouseFeaturesList, item.offer.features)) {
+          if ((filterHouseType.value === 'any') | (filterHouseType.value === item.offer.type)) {
+            if ((filterHousingRooms.value === 'any') | (filterHousingRooms.value === item.offer.rooms)) {
+              if ((filterHousingGuests.value === 'any') | (filterHousingGuests.value === item.offer.guests)) {
+                if (filterHousingPrice.value === 'any') {
                   if (filteredOfferCount < size) {
                     window.map.setMapPin(item, index);
                     filteredOfferCount++;
                   }
                 } else {
-                  console.log('blackList', item);
+                  if (window.form.validateFilterHousingPrice(filterHousingPrice.options[filterHousingPrice.selectedIndex].value, item.offer.price)) {
+                    if (filteredOfferCount < size) {
+                      window.map.setMapPin(item, index);
+                      filteredOfferCount++;
+                    }
+                  }
                 }
-              }
 
+              }
             }
           }
         }
@@ -107,6 +110,10 @@
         window.card.removeCard();
       });
       filterHousingGuests.addEventListener('change', function () {
+        window.common.filterOffers(size);
+        window.card.removeCard();
+      });
+      filterHouseFeatures.addEventListener('click', function () {
         window.common.filterOffers(size);
         window.card.removeCard();
       });
