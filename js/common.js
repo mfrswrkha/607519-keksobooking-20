@@ -12,17 +12,18 @@
   var filterHousingGuests = filterForm.querySelector('#housing-guests');
   var filterHouseFeatures = filterForm.querySelector('#housing-features');
   var filterHouseFeaturesList = filterForm.querySelector('#housing-features').querySelectorAll('input');
+
   window.common = {
     setStateInit: function () {
       adForm.classList.add('ad-form--disabled');
       setAttributeForListFields(adFormInputsSelects, 'disabled', 'disabled');
       setAttributeForListFields(filterFormInputsSelects, 'disabled', 'disabled');
       window.form.setAddressFromPin(adForm, false);
-
     },
     setStateActive: function () {
       adForm.classList.remove('ad-form--disabled');
       removeAttributeForListFields(adFormInputsSelects, 'disabled');
+
       if (window.main.offers.length > 0) {
         removeAttributeForListFields(filterFormInputsSelects, 'disabled');
         window.map.setMapPins(window.main.offers);
@@ -144,6 +145,7 @@
         }
       });
     }
+
   };
   function setAttributeForListFields(element, attribute, value) {
     for (var i = 0; i < element.length; i++) {
