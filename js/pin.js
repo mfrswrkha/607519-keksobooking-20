@@ -38,14 +38,15 @@
                 y: moveEvt.clientY
               };
 
-              pinForNewOffer.style.top = (pinForNewOffer.offsetTop - shift.y) + 'px';
-              pinForNewOffer.style.left = (pinForNewOffer.offsetLeft - shift.x) + 'px';
-              address.value = (pinForNewOffer.offsetLeft - shift.x).toString() + ', ' + (pinForNewOffer.offsetTop - shift.y).toString();
+              var pinForNewOfferY = (pinForNewOffer.offsetTop - shift.y);
+              var pinForNewOfferX = (pinForNewOffer.offsetLeft - shift.x);
+
+              pinForNewOffer.style.top = pinForNewOfferY + 'px';
+              pinForNewOffer.style.left = pinForNewOfferX + 'px';
+              address.value = pinForNewOfferX.toString() + ', ' + pinForNewOfferY.toString();
             };
 
-            var onMouseUp = function (upEvt) {
-              upEvt.preventDefault();
-
+            var onMouseUp = function () {
               pinForNewOffer.removeEventListener('mousemove', onMouseMove);
               pinForNewOffer.removeEventListener('mouseup', onMouseUp);
             };

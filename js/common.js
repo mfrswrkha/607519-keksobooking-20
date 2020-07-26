@@ -50,8 +50,8 @@
       window.main.offers.forEach(function (item, index) {
         if (window.form.validateFilterHouseFeatures(filterHouseFeaturesList, item.offer.features)) {
           if ((filterHouseType.value === 'any') | (filterHouseType.value === item.offer.type)) {
-            if ((filterHousingRooms.value === 'any') | (filterHousingRooms.value === item.offer.rooms)) {
-              if ((filterHousingGuests.value === 'any') | (filterHousingGuests.value === item.offer.guests)) {
+            if ((filterHousingRooms.value === 'any') | (filterHousingRooms.value === item.offer.rooms.toString())) {
+              if ((filterHousingGuests.value === 'any') | (filterHousingGuests.value === item.offer.guests.toString())) {
                 if (filterHousingPrice.value === 'any') {
                   if (filteredOfferCount < size) {
                     window.map.setMapPin(item, index);
@@ -83,15 +83,6 @@
       window.form.adForm.reset();
       window.form.filterForm.reset();
       window.card.removeCard();
-      // window.form.setAddressFromPin(adForm, false);
-
-    },
-    listenFilterHouseType: function (size) {
-    //  var filterHouseType = filterForm.querySelector('#housing-type');
-      filterHouseType.addEventListener('change', function () {
-        window.common.filterOffers(size);
-        window.card.removeCard();
-      });
     },
     listenFilterHouse: function (size) {
       filterHouseType.addEventListener('change', function () {
@@ -135,7 +126,7 @@
       });
     },
     onErrorSendData: function () {
-      var template = document.querySelector('#errot').content.querySelector('.error');
+      var template = document.querySelector('#error').content.querySelector('.error');
       var fragment = document.createDocumentFragment();
       var mainBlock = document.querySelector('main');
       var element = template.cloneNode(true);
