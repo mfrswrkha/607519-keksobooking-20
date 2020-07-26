@@ -106,7 +106,9 @@
       });
       buttonReset.addEventListener('click', function (evt) {
         if (evt.button === LEFT_BUTTON) {
-          evt.preventDefault();
+          window.common.setStateReset();
+          window.common.setStateInit();
+
         }
       });
     },
@@ -197,8 +199,6 @@
         return false;
       }
     });
-    // eslint-disable-next-line no-console
-    console.log('rangePrice', priceRangeRule);
     if (currentPrice >= priceRangeRule.minPrice) {
       if (priceRangeRule.maxPrice === null) {
         return true;

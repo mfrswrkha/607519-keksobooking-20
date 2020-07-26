@@ -23,14 +23,11 @@
     setStateActive: function () {
       adForm.classList.remove('ad-form--disabled');
       removeAttributeForListFields(adFormInputsSelects, 'disabled');
-      console.log(window.main.offers);
       if (window.main.offers.length > 0) {
         removeAttributeForListFields(filterFormInputsSelects, 'disabled');
         window.map.setMapPins(window.main.offers);
-        console.log('defaultistPin');
         window.common.filterOffers(window.main.sizeOffersList);
         window.pin.listenPinOffer();
-        // eslint-disable-next-line no-console
         window.common.listenFilterHouse(window.main.sizeOffersList);
       }
       window.map.offersMap.classList.remove('map--faded');
@@ -118,11 +115,43 @@
         window.card.removeCard();
       });
     },
-    onSuccessSendData: function (data) {
-      console.log('successSendData', data);
+    onSuccessSendData: function () {
+      var template = document.querySelector('#success').content.querySelector('.success');
+      var fragment = document.createDocumentFragment();
+      var mainBlock = document.querySelector('main');
+      var element = template.cloneNode(true);
+      window.common.setStateReset();
+      window.common.setStateInit();
+      fragment.appendChild(element);
+      mainBlock.appendChild(fragment);
+      var successMessage = mainBlock.querySelector('.success');
+      successMessage.addEventListener('click', function () {
+        successMessage.remove();
+      });
+      successMessage.addEventListener('keydown', function (evt) {
+        if (evt.key === 'Esc') {
+          successMessage.remove();
+        }
+      });
     },
-    onErrorSendData: function (data) {
-      console.log('errorSendData', data);
+    onErrorSendData: function () {
+      var template = document.querySelector('#errot').content.querySelector('.error');
+      var fragment = document.createDocumentFragment();
+      var mainBlock = document.querySelector('main');
+      var element = template.cloneNode(true);
+      window.common.setStateReset();
+      window.common.setStateInit();
+      fragment.appendChild(element);
+      mainBlock.appendChild(fragment);
+      var errorMessage = mainBlock.querySelector('.error');
+      errorMessage.addEventListener('click', function () {
+        errorMessage.remove();
+      });
+      errorMessage.addEventListener('keydown', function (evt) {
+        if (evt.key === 'Esc') {
+          errorMessage.remove();
+        }
+      });
     }
   };
   function setAttributeForListFields(element, attribute, value) {

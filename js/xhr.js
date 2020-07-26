@@ -29,11 +29,11 @@
       xhr.responseType = 'json';
       xhr.addEventListener('load', function () {
         if (xhr.status === 200) {
-        // eslint-disable-next-line no-console
-          console.log(xhr.readyState);
           if (xhr.readyState === 4) {
-            onSuccessSendData(xhr.response);
+            onSuccessSendData();
           }
+        } else {
+          onErrorSendData();
         }
       }
       );

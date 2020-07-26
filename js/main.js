@@ -13,8 +13,6 @@
   window.xhr.loadData(urlForLoad, runBasicLogic);
   function runBasicLogic(sourceData) {
     window.main.offers = sourceData.slice(0);
-    // eslint-disable-next-line no-console
-    console.log(window.main.offers);
     window.common.setStateInit();
     window.pin.listenPinForNewOfferMouse();
     window.pin.listenPinForNewOfferKey();

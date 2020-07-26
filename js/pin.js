@@ -64,12 +64,6 @@
       });
     },
     listenPinOffer: function () {
-      // var allPins = window.map.mapPins.querySelectorAll('.map__pin');
-      // console.log('mappins0', allPins[0]);
-      // allPins[0].remove();
-      //  offerPins.fi
-      // console.log('mappins', allPins);
-      // for
       window.map.mapPins.addEventListener('mousedown', function (evt) {
         var currentActivePin = document.querySelector('.map__pin--active');
         if (evt.target.parentNode.classList.contains('map__pin--main')) {
@@ -90,8 +84,6 @@
 
 
         }
-        // eslint-disable-next-line no-console
-        // console.log('index-', evt.target.parentNode);
       });
     }
   };
